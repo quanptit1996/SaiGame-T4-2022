@@ -2,47 +2,58 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Vector3 movement = new Vector3(0, 0, 0);
-    public Vector3 moveDirection = new Vector3(0, 0, 0);
-    public float lastDirection = 0f;
-    public bool isTurnRight = true;
-    public bool isMoving = false;
+    [Header("Move")]
     public bool groundedPlayer = false;
-    public float speed = 2f;
-    public float gravityValue = -9.81f;
-    public float jumpHeight = 1.0f;
+    public bool isMoving = false;
+    public Vector3 movement = new Vector3(0, 0, 0);
+
+    [Header("Walking")] 
+    public float moveHorizontal = 0f;
+    public float lastDirection = 0f;
+    public float speed = 3f;
+    public bool isTurnRight = true;
+
+    [Header("Jumping")]
+    public bool isJump = false;
+    public float jumpHeight = 5.0f;
+    public float fallingSpeed = 7f;
 
     protected virtual void Update()
     {
+        this.groundedPlayer = this.IsGrounded(); // check có đang đứng ở mặt đất hay k..
+        this.Jumping();
+        this.Falling();
         this.Moving();
         this.Turning();
+        this.Animation();
+
+        PlayerController.instance.characterController.Move(this.movement * Time.deltaTime);
     }
 
+    protected virtual void Jumping()
+    {
+        if (!this.groundedPlayer) return;
+        if (this.isJump) this.movement.y = this.jumpHeight;
+
+    }
+
+    protected virtual void Falling()
+    {
+        this.movement.y -= this.fallingSpeed * Time.deltaTime;
+    }
     protected virtual void Moving()
     {
+        if(!this.groundedPlayer) return;
+        // if (PlayerController.instance.)
+        // {
+        //     
+        // }
 
-        this.groundedPlayer = this.IsGrounded();
-        if (groundedPlayer && this.movement.y < 0)
-        {
-            this.movement.y = 0f;
-        }
+        this.movement.x = this.speed * this.moveHorizontal;
+    }
 
-        this.moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        PlayerController.instance.characterController.Move(this.moveDirection * Time.deltaTime * this.speed);
-
-        if (this.moveDirection != Vector3.zero)
-        {
-            gameObject.transform.forward = this.moveDirection;
-        }
-
-        if (Input.GetButtonDown("Jump") && groundedPlayer)
-        {
-            this.movement.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-        }
-        this.movement.y += gravityValue * Time.deltaTime;
-        PlayerController.instance.characterController.Move(this.movement * Time.deltaTime);
-
-
+    protected virtual void Animation()
+    {
         if (this.IsMoving()) this.AniMoving();
         else this.AniIdle();
     }
@@ -65,18 +76,19 @@ public class PlayerMovement : MonoBehaviour
     public virtual bool IsMoving()
     {
         this.isMoving = false;
-        if (this.moveDirection.x != 0) this.isMoving = true;
-
+        if (this.isJump) this.isMoving = true;
+        if (this.moveHorizontal != 0) this.isMoving = true;
         return this.isMoving;
     }
 
     protected virtual void Turning()
     {
         this.isTurnRight = true;
-        if (this.moveDirection.x != 0) this.lastDirection = this.moveDirection.x;
+        if (this.movement.x != 0) this.lastDirection = this.movement.x;
         if (this.lastDirection < 0) this.isTurnRight = false;
 
         Vector3 scale = PlayerController.instance.playerModel.localScale;
+        
         if (this.isTurnRight) scale.x = 1f;
         else scale.x = -1f;
 

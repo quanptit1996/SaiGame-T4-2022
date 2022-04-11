@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
     [Header("Move")]
     public bool groundedPlayer = false;
     public bool isMoving = false;
@@ -17,6 +19,11 @@ public class PlayerMovement : MonoBehaviour
     public bool isJump = false;
     public float jumpHeight = 5.0f;
     public float fallingSpeed = 7f;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     protected virtual void Update()
     {
@@ -44,10 +51,6 @@ public class PlayerMovement : MonoBehaviour
     protected virtual void Moving()
     {
         if(!this.groundedPlayer) return;
-        // if (PlayerController.instance.)
-        // {
-        //     
-        // }
 
         this.movement.x = this.speed * this.moveHorizontal;
     }

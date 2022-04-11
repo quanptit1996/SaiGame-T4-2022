@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : OverideMonoBehaviour
 {
     public static PlayerController instance;
 
@@ -12,20 +12,16 @@ public class PlayerController : MonoBehaviour
     public PlayerCombat playerCombat;
     public Animator animator;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (PlayerController.instance != null) Debug.LogError("Only 1 PlayerController allow");
         PlayerController.instance = this;
-        this.LoadComponents();
-       
     }
 
-    protected virtual void Reset()
-    {
-        this.LoadComponents();
-    }
+   
 
-    protected virtual void LoadComponents()
+    protected override void LoadComponents()
     {
         this.LoadChar();
         this.LoadCharCtrl();

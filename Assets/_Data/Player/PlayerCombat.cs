@@ -63,7 +63,6 @@ public class PlayerCombat : OverideMonoBehaviour
 
         Debug.Log("SpawnSkill");
 
-        //Transform fx = FXManager.instance.Spawn("Fireball11");    
         GameObject fx = ObjectPool.instance.GetPooledObject();
         if (fx != null)
         {

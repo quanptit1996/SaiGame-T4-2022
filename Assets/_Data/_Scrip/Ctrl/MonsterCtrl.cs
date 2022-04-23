@@ -4,31 +4,36 @@ using UnityEngine;
 
 public class MonsterCtrl : OverideMonoBehaviour
 {
-   public MonterMoverment monterMoverment;
-   public MonsterTarget monsterTarget;
-   public CharacterController characterController;
-   public DamageReceive damageReceive;
-   public Transform model;
-   public Animator animator;
+    public MonsterMovement monsterMovement;
+    public MonsterTarget monsterTarget;
+    public CharacterController characterController;
+    public DamageReceive damageReceiver;
+    public Transform model;
+    public Animator animator;
 
-   protected override void LoadComponents()
-   {
-      base.LoadComponents();
-      LoadMonsterMoverment();
-   }
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadMonsterMovement();
+        this.LoadDamageReceiver();
+    }
 
-   protected virtual void LoadMonsterMoverment()
-   {
-      if(monterMoverment != null) return;
-      model = transform.Find("Model");
-      animator = model.transform.GetComponentInChildren<Animator>();
-      monterMoverment = transform.Find("MonsterMovement").GetComponent<MonterMoverment>();
-      monsterTarget = transform.Find("MonsterTarget").GetComponent<MonsterTarget>();
-      damageReceive = transform.Find("DamageReceive").GetComponent<DamageReceive>();
-      characterController = GetComponent<CharacterController>();
+    protected virtual void LoadMonsterMovement()
+    {
+        if (this.monsterMovement != null) return;
+        this.model = transform.Find("Model");
+        this.animator = this.model.GetComponentInChildren<Animator>();
+        this.monsterMovement = transform.Find("MonsterMovement").GetComponent<MonsterMovement>();
+        this.monsterTarget = transform.Find("MonsterTarget").GetComponent<MonsterTarget>();
+        this.damageReceiver = transform.Find("DamageReceive").GetComponent<DamageReceive>();
+        this.characterController = GetComponent<CharacterController>();
+        Debug.Log(transform.name + ": LoadMonsterMovement", gameObject);
+    }
 
-   }
-   
-   
-   
+    protected virtual void LoadDamageReceiver()
+    {
+        if (this.damageReceiver != null) return;
+        this.damageReceiver = transform.Find("DamageReceive").GetComponent<DamageReceive>();
+        Debug.Log(transform.name + ": LoadDamageReceiver", gameObject);
+    }
 }

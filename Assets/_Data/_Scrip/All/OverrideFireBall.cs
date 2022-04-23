@@ -18,6 +18,7 @@ public class OverrideFireBall : FireBallFly
 
     protected override void OnTriggerEnter(Collider col)
     {
+        base.OnTriggerEnter(col);
         var fx  =ObjectPool.instance.GetPooledExplosion();
         fx.transform.position = col.transform.position + new Vector3(0,0.8f,0);
         fx.SetActive(true);

@@ -1,22 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MonsterCombat : Combat
 {
-    [Header("Monster")] 
+    [Header("TargetPlayer")]
+   
+    [Header("Monster")]
     public MonsterCtrl monsterCtrl;
 
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        LoadMonsterCtrl();
+        this.LoadMonsterCtrl();
     }
 
     protected virtual void LoadMonsterCtrl()
     {
-        if(this.monsterCtrl != null) return;
+        if (this.monsterCtrl != null) return;
         this.monsterCtrl = transform.parent.GetComponent<MonsterCtrl>();
+        Debug.Log(transform.name + ": LoadMonsterCtrl", gameObject);
     }
 
     public override void SpawnSkill()
@@ -26,7 +27,15 @@ public class MonsterCombat : Combat
 
     protected override void Attacking()
     {
-        //this.Animator().SetBool("Attacking", this.IsAttacking());
+        Transform target = PlayerController.instance.transform;
+
+        float distance = Vector2.Distance(gameObject.transform.position, target.position);
+        if (distance < 200 )
+        {
+            Debug.Log("distance"+distance);
+            // this.Animator().SetBool("isAttacking", this.IsAttacking());
+            this.Animator().Play("attack");
+        }
     }
 
     protected override Animator Animator()
@@ -36,6 +45,6 @@ public class MonsterCombat : Combat
 
     public override CharCtrlMove CharCtrlMove()
     {
-        return this.monsterCtrl.monterMoverment;
+        return this.monsterCtrl.monsterMovement;
     }
 }

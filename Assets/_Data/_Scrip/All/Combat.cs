@@ -48,7 +48,7 @@ public abstract class Combat : OverideMonoBehaviour
 
     protected virtual void Attacking()
     {
-        this.Animator().SetBool("Attacking", this.IsAttacking());
+        this.Animator().SetBool("isAttacking", this.IsAttacking());
     }
 
     /// <summary>

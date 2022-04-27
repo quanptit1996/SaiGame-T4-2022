@@ -30,7 +30,7 @@ public class MonsterCombat : Combat
         Transform target = PlayerController.instance.transform;
 
         float distance = Vector2.Distance(gameObject.transform.position, target.position);
-        if (distance < 200 )
+        if (distance < 3 )
         {
             Debug.Log("distance"+distance);
             // this.Animator().SetBool("isAttacking", this.IsAttacking());
